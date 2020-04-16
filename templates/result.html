@@ -1,0 +1,19 @@
+{%extends 'preloginbase.html'%}
+{%block content%}
+<div class="buffer"></div>
+{%if successful_signup%}
+    <h1 class="text-warning font-weight-bold bg-dark px-2 rounded">Thank you for signing up, {{name}}</h1>
+    <p class="text-light font-weight-bold bg-dark px-2 rounded">YOUR USERNAME:{{username_signup}}</p>
+    <a href="{{url_for('index')}}" class="text-light font-weight-bold bg-dark px-2 rounded">Login Here!</a>
+{%elif unique_username%}
+    <h1 class="text-warning font-weight-bold bg-dark px-2 rounded">OOps, Email already exists! {{session['name']}}</h1>
+    <h4><a href="{{url_for('signup')}}" class="text-light font-weight-bold bg-dark px-2 rounded">Sign Up again</a></h4>
+{%elif unique_email%}
+    <h1 class="text-warning font-weight-bold bg-dark px-2 rounded">OOps, Username already exists! {{session['name']}}</h1>
+    <h4><a href="{{url_for('signup')}}" class="text-light font-weight-bold bg-dark px-2 rounded">Sign Up again</a></h4>
+{%else%}
+    <h1 class="text-warning font-weight-bold bg-dark px-2 rounded">OOps, Email and Username already exists! {{session['name']}}</h1>
+    <h4><a href="{{url_for('signup')}}" class="text-light font-weight-bold bg-dark px-2 rounded">Sign Up again</a></h4>
+{%endif%}
+<div class="buffer"></div>
+{%endblock%}
