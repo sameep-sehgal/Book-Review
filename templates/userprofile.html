@@ -1,9 +1,11 @@
 {%extends 'navbar.html'%}
 {%block content%}
-<h3 class="text-warning font-weight-bold bg-dark padd br py-1">Name:</h3><br>
-<h5 class="text-daanger font-weight-bold bg-dark padd br py-1">{{name}}</h5><hr>
-<h3 class="text-warning font-weight-bold bg-dark padd br py-1">Username:</h3><br>
-<h5 class="text-dark font-weight-bold bg-dark padd br py-1">{{username}}</h5><hr>
-<h3 class="text-warning font-weight-bold bg-dark padd br py-1">Email:</h3><br>
-<h5 class="text-dark font-weight-bold bg-dark padd br py-1">{{email}}</h5><hr>
+<div class="container my-5">
+    <h3 class="text-warning font-weight-bold bg-dark padd br py-1 centerjustify">Name:</h3>
+    <h5 class="text-daanger font-weight-bold padd br py-1 centerjustify">{{name}}</h5><hr>
+    <h3 class="text-warning font-weight-bold bg-dark padd br py-1 centerjustify">Username:</h3>
+    <h5 class="text-dark font-weight-bold padd br py-1 centerjustify">{{username}}</h5><hr>
+    <h3 class="text-warning font-weight-bold bg-dark padd br py-1 centerjustify">Email:</h3>
+    <h5 class="text-dark font-weight-bold padd br py-1 centerjustify">{{email}}</h5><hr>
+</div>
 {%endblock%}

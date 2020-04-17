@@ -1,13 +1,30 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Book Review</title>
-</head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">Book Review</a>
-    </nav>
-</body>
-</html>
+{%extends 'preloginbase.html'%}
+
+{%block content%}
+
+<div class="buffer"></div>
+<h1 class="container text-warning font-weight-bold bg-dark padd br py-1 centerjustify">BOOK PILE</h1>
+<div class="container br w-2 border-light bg-dark my-0">
+
+    <form method="POST" action="{{url_for('loginagain')}}">
+        <div class="px-5 py-1">
+          <div class="form-group">
+            <label for="exampleInputEmail1" class="text-light font-weight-bold">Username</label>
+            <input type="text" class="form-control " id="exampleInputEmail1" aria-describedby="emailHelp" name="username_login" required>
+            <small id="emailHelp" class="form-text text-muted text-light">We'll never share your Username and password with anyone else.</small>
+          </div>
+          <div class="form-group">
+            <label for="exampleInputPassword1" class="text-light font-weight-bold">Password</label>
+            <input type="password" class="form-control" id="exampleInputPassword1" required name="password_login">
+          </div>
+          <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input" id="exampleCheck1" required>
+            <label class="form-check-label text-light font-weight-bold" for="exampleCheck1">Verify Human</label>
+          </div>
+          <button type="submit" class="btn btn-primary justify-content-center my-3 br btn-danger font-weight-bold">Login</button>
+        </div>
+      </form>
+</div>
+<h5 class="text-light">Not signed up? <a href="{{url_for('signup')}}" class="text-warning">Signup Now!</a></h5>
+<div class="buffer"></div>
+{%endblock%}

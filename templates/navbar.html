@@ -1,7 +1,30 @@
 {%extends 'base.html'%}
 {%block body%}
+<style>
+  .buffer{
+        height: 30vh;
+    }
+    h1{
+        font-family: Georgia, 'Times New Roman', Times, serif;
+        font-style: italic;
+        font-size: 5rem;
+        
+    }
+    .centerjustify{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        
+    }
+    .padd{
+        padding: 0px 125px;
+    }
+    .br{
+        border-radius: 30px;
+    }
+</style>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">Book Review</a>
+    <a class="navbar-brand" href="#">Book Pile</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -9,7 +32,7 @@
     <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
       <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
         <li class="nav-item active">
-          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+          <a class="nav-link" href="{{url_for('home',username=session['username_login'])}}">Home <span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item dropdown dropd">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -17,8 +40,8 @@
             </a>
             <!-- Drop down menu for user profile -->
             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <a class="dropdown-item" href="#">Open Profile</a>
-              <a class="dropdown-item" href="#">Sign Out</a>
+              <a class="dropdown-item" href="{{url_for('userprofile')}}">Open Profile</a>
+              <a class="dropdown-item" href="{{url_for('loggedout')}}">Sign Out</a>
             </div>
         </li>
       </ul>
