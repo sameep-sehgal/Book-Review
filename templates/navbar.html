@@ -22,6 +22,27 @@
     .br{
         border-radius: 30px;
     }
+    .singlelinetext{
+      white-space: unset;
+      text-overflow: unset;
+      overflow: unset;
+    }
+    .positionfixed{
+      position: fixed;
+    }
+    .boxshadow{
+      -webkit-box-shadow:rgba(0,0,0,0.8) 0px 5px 15px, inset rgba(0,0,0,0.15) 0px -10px 20px;
+      -moz-box-shadow:rgba(0,0,0,0.8) 0px 5px 15px, inset rgba(0,0,0,0.15) 0px -10px 20px;
+      -o-box-shadow:rgba(0,0,0,0.8) 0px 5px 15px, inset rgba(0,0,0,0.15) 0px -10px 20px;
+      box-shadow:rgba(0,0,0,0.8) 0px 5px 15px, inset rgba(0,0,0,0.15) 0px -10px 20px;
+    }
+    .growanimation{
+      transition: ease-in-out 0.6s;
+    }
+    .growanimation:hover{
+      transform: scale(1.05);
+    }
+      
 </style>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <a class="navbar-brand" href="#">Book Pile</a>

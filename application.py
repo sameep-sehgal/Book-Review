@@ -35,7 +35,15 @@ def home(username):
     #checking if user is already logged in
     if 'username_login' not in session:
         return redirect(url_for('index'))
-    return render_template('home.html',title='Home')
+    search_input=request.args.get('search_input')
+    if search_input is not None:
+        books=db.execute("SELECT * FROM books WHERE isbn LIKE '%"+search_input+"%' OR name LIKE '%"+search_input+"%' OR author LIKE '%"+search_input+"%' LIMIT 100")
+        books_count=books.rowcount       
+    else:
+        books=db.execute("SELECT * FROM books WHERE isbn LIKE '%"+''+"%' OR name LIKE '%"+''+"%' OR author LIKE '%"+''+"%' LIMIT 100")
+        books_count=books.rowcount 
+    return render_template('home.html',title='Home',books=books,books_count=books_count)
+
 
 @app.route('/signup')
 def signup():
@@ -113,7 +121,7 @@ def userprofile():
         name=user_credentials.name
         email=user_credentials.email
         username=user_credentials.username
-    return render_template('userprofile.html',name=name,username=username,email=email)
+    return render_template('userprofile.html',name=name,username=username,email=email,title='Profile: '+name)
 
 
 @app.route('/loggedout')
