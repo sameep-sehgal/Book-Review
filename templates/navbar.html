@@ -42,7 +42,11 @@
     .growanimation:hover{
       transform: scale(1.05);
     }
-      
+    .displaygrid{
+    display: grid;
+    grid-gap: 15px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
 </style>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <a class="navbar-brand" href="#">Book Pile</a>
@@ -61,7 +65,7 @@
             </a>
             <!-- Drop down menu for user profile -->
             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <a class="dropdown-item" href="{{url_for('userprofile')}}">Open Profile</a>
+              <a class="dropdown-item" href="{{url_for('userprofile',username=session['username_login'])}}">Open Profile</a>
               <a class="dropdown-item" href="{{url_for('loggedout')}}">Sign Out</a>
             </div>
         </li>

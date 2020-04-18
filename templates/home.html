@@ -1,12 +1,5 @@
 {%extends 'navbar.html'%}
 {%block content%}
-<style>
-    .displaygrid{
-    display: grid;
-    grid-gap: 15px;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    }
-</style>
 <h4 class="text-dark font-weight-bold px-2 br pt-3 centerjustify">Search books by Name, Author's Name,Isbn.</h4>
 <h4 class="text-dark font-weight-bold px-2 br pt-3 centerjustify">(We have a collection of 5000 books!)</h4>
 <!-- Creating search button -->
@@ -19,11 +12,11 @@
 <div class="displaygrid" style="overflow:scroll; height:780px; border-left:10px dotted black; border-right: 10px dotted black; margin-bottom: 0px;">
 {%for book in books%} 
         <div class="card bg-dark br p-3 boxshadow growanimation m-4" style="width: 18rem; ">
-            <a href="#" style="text-decoration: none;">
+            <a href="{{url_for('bookpage',username=session['username_login'],book_id=book.id)}}" style="text-decoration: none;">
                 <img src="../static/janko-ferlic-sfL_QOnmy00-unsplash.jpg" class="card-img-top centerjustify p-1 bg-light mt-3" alt="..." height="275px">
             </a>
             <div class="card-body">
-                <a href="#" style="text-decoration: none;">
+                <a href="{{url_for('bookpage',username=session['username_login'],book_id=book.id)}}" style="text-decoration: none;">
                     <h4 class="card-title text-warning text-center singlelinetext" style="height:40px; font: 1em sans-serif; font-weight: bolder;">{{book.name}}</h4>
                 </a>
                 <p class="card-text text-light centerjustify"><span style="font-weight: bolder; font-family: Georgia, 'Times New Roman', Times, serif;">Author: </span> {{book.author}}</p>

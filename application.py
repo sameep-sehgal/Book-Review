@@ -6,6 +6,8 @@ from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 
+
+
 app = Flask(__name__)
 
 
@@ -38,11 +40,27 @@ def home(username):
     search_input=request.args.get('search_input')
     if search_input is not None:
         books=db.execute("SELECT * FROM books WHERE isbn LIKE '%"+search_input+"%' OR name LIKE '%"+search_input+"%' OR author LIKE '%"+search_input+"%' LIMIT 100")
-        books_count=books.rowcount       
+        books_count=books.rowcount    
     else:
         books=db.execute("SELECT * FROM books WHERE isbn LIKE '%"+''+"%' OR name LIKE '%"+''+"%' OR author LIKE '%"+''+"%' LIMIT 100")
         books_count=books.rowcount 
     return render_template('home.html',title='Home',books=books,books_count=books_count)
+
+
+@app.route('/book/<username>/<book_id>/')
+def bookpage(username,book_id):
+    #extracting book data from database
+    book_details=db.execute("SELECT * FROM books WHERE id=:book_id",{'book_id':book_id})
+    #extracting review and rating user entered
+    rating=request.args.get('rating')
+    review=request.args.get('review')
+    #saving the review in reviews table in database
+    if review is not None:
+        db.execute('INSERT INTO reviews (username,book_id,review,rating) VALUES (:username,:book_id,:review,:rating)',{'username':session['username_login'],'book_id':book_id,'review':review,'rating':int(rating)})
+        return redirect(url_for('bookpage',username=session['username_login'],book_id=book_id))
+    #extracting reviews for requested book
+    user_reviews=db.execute('SELECT * FROM reviews WHERE book_id=:book_id',{'book_id':book_id})
+    return render_template('bookpage.html',book_details=book_details,user_reviews=user_reviews)
 
 
 @app.route('/signup')
@@ -110,8 +128,8 @@ def loginagain():
     return render_template('loginagain.html')
 
 
-@app.route('/userprofile')
-def userprofile():
+@app.route('/<username>')
+def userprofile(username):
     #checking if user is already logged in
     if 'username_login' not in session:
         return redirect(url_for('index'))
