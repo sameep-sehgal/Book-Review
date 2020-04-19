@@ -1,6 +1,7 @@
 import os
 import csv
 import requests
+import urllib.parse
 
 from flask import Flask, session,render_template,request,redirect,url_for
 from flask_session import Session
@@ -11,6 +12,21 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 
 app = Flask(__name__)
 
+def get_review_counts(isbn):
+    developer_key = 'pq5UpmE7H8IHZQnA6JfF0Q'
+    json_data = requests.get("https://www.goodreads.com/book/review_counts.json", params={"key": developer_key, "isbns": isbn}).json()
+
+    # Get data we need (average_rating) from the JSON response
+    average_rating = json_data['books'][0]['average_rating']
+    number_ratings = json_data['books'][0]['work_ratings_count']
+    if not average_rating:
+        average_rating = "Not found"
+    if not number_ratings:
+        number_ratings = "Not found"
+
+    # Store data in dict
+    review_counts_result = {'average_rating': average_rating, 'number_ratings': number_ratings}
+    return review_counts_result
 
 
 # Check for environment variable
@@ -45,11 +61,22 @@ def home(username):
         #when search input is not empty
         books=db.execute("SELECT * FROM books WHERE isbn LIKE '%"+search_input+"%' OR upper(name) LIKE '%"+search_input+"%' OR upper(author) LIKE '%"+search_input+"%' LIMIT 100")
         books_count=books.rowcount  #keep the count of number of books after search 
+        isbns=db.execute("SELECT isbn FROM books WHERE isbn LIKE '%"+search_input+"%' OR upper(name) LIKE '%"+search_input+"%' OR upper(author) LIKE '%"+search_input+"%' LIMIT 100")
+        goodreads_data_list = []
+        for isbn in isbns:
+            goodreads_data=get_review_counts(isbn)
+            goodreads_data_list.append(goodreads_data)
+
     else:
         #when search input is empty displaying all books
         books=db.execute("SELECT * FROM books WHERE isbn LIKE '%"+''+"%' OR name LIKE '%"+''+"%' OR author LIKE '%"+''+"%' LIMIT 100")
         books_count=books.rowcount #keep the count of number of books after search
-    return render_template('home.html',title='Home',books=books,books_count=books_count)
+        isbns=db.execute("SELECT isbn FROM books WHERE isbn LIKE '%"+''+"%' OR name LIKE '%"+''+"%' OR author LIKE '%"+''+"%' LIMIT 100")
+        goodreads_data_list = []
+        for isbn in isbns:
+            goodreads_data=get_review_counts(isbn)
+            goodreads_data_list.append(goodreads_data)
+    return render_template('home.html',title='Home',books=books,books_count=books_count,goodreads_data_list=goodreads_data_list)
 
 
 @app.route('/book/<username>/<book_id>/',methods=['GET','POST'])
