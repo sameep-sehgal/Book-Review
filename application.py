@@ -41,8 +41,9 @@ def home(username):
     #extracting search input
     search_input=request.args.get('search_input')
     if search_input is not None:
+        search_input=search_input.upper()
         #when search input is not empty
-        books=db.execute("SELECT * FROM books WHERE isbn LIKE '%"+search_input+"%' OR name LIKE '%"+search_input+"%' OR author LIKE '%"+search_input+"%' LIMIT 100")
+        books=db.execute("SELECT * FROM books WHERE isbn LIKE '%"+search_input+"%' OR upper(name) LIKE '%"+search_input+"%' OR upper(author) LIKE '%"+search_input+"%' LIMIT 100")
         books_count=books.rowcount  #keep the count of number of books after search 
     else:
         #when search input is empty displaying all books
@@ -74,7 +75,7 @@ def bookpage(username,book_id):
     
     #extracting reviews for requested book
     user_reviews=db.execute('SELECT * FROM reviews WHERE book_id=:book_id',{'book_id':book_id})
-    return render_template('bookpage.html',book_details=book_details,user_reviews=user_reviews,review_entered=review_entered)
+    return render_template('bookpage.html',book_details=book_details,user_reviews=user_reviews,review_entered=review_entered,title='Book:'+book_id)
 
 
 @app.route('/signup')
