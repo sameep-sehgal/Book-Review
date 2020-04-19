@@ -208,5 +208,6 @@ def accountdeleted():
     #delete session for the user
     db.execute("DELETE FROM reviews WHERE username=:username",{'username':session['username_login']})
     db.execute("DELETE FROM users WHERE username=:username",{'username':session['username_login']})
+    db.commit()
     session.pop('username_login')
     return render_template('accountdeleted.html')
