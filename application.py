@@ -59,33 +59,33 @@ def home(username):
     if search_input is not None:
         search_input=search_input.upper()
         #when search input is not empty
-        books=db.execute("SELECT * FROM books WHERE isbn LIKE '%"+search_input+"%' OR upper(name) LIKE '%"+search_input+"%' OR upper(author) LIKE '%"+search_input+"%' LIMIT 100")
+        books=db.execute("SELECT * FROM books WHERE isbn LIKE '%"+search_input+"%' OR upper(name) LIKE '%"+search_input+"%' OR upper(author) LIKE '%"+search_input+"%' LIMIT 10")
         books_count=books.rowcount  #keep the count of number of books after search 
-        isbns=db.execute("SELECT isbn FROM books WHERE isbn LIKE '%"+search_input+"%' OR upper(name) LIKE '%"+search_input+"%' OR upper(author) LIKE '%"+search_input+"%' LIMIT 100")
         goodreads_data_list = []
-        for isbn in isbns:
-            goodreads_data=get_review_counts(isbn)
+        for book in books:
+            goodreads_data=get_review_counts(book.isbn)
             goodreads_data_list.append(goodreads_data)
 
     else:
         #when search input is empty displaying all books
-        books=db.execute("SELECT * FROM books WHERE isbn LIKE '%"+''+"%' OR name LIKE '%"+''+"%' OR author LIKE '%"+''+"%' LIMIT 100")
+        books=db.execute("SELECT * FROM books WHERE isbn LIKE '%"+''+"%' OR name LIKE '%"+''+"%' OR author LIKE '%"+''+"%' LIMIT 10")
         books_count=books.rowcount #keep the count of number of books after search
-        isbns=db.execute("SELECT isbn FROM books WHERE isbn LIKE '%"+''+"%' OR name LIKE '%"+''+"%' OR author LIKE '%"+''+"%' LIMIT 100")
         goodreads_data_list = []
-        for isbn in isbns:
-            goodreads_data=get_review_counts(isbn)
+        for book in books:
+            goodreads_data=get_review_counts(book.isbn)
             goodreads_data_list.append(goodreads_data)
     return render_template('home.html',title='Home',books=books,books_count=books_count,goodreads_data_list=goodreads_data_list)
 
 
 @app.route('/book/<username>/<book_id>/',methods=['GET','POST'])
-def bookpage(username,book_id,rating,review):
+def bookpage(username,book_id):
     #checking if user is already logged in
     if 'username_login' not in session:
         return redirect(url_for('index'))
     #extracting book data from database
     book_details=db.execute("SELECT * FROM books WHERE id=:book_id",{'book_id':book_id})
+    for book_detail in book_details:
+        goodreads_data=get_review_counts(book_detail.isbn)
     #checking if user has already reviewed the book
     if db.execute("SELECT * FROM reviews WHERE username=:username AND book_id=:book_id",{'username':session['username_login'],'book_id':book_id}).rowcount==0:
         review_entered = False
@@ -102,7 +102,7 @@ def bookpage(username,book_id,rating,review):
     
     #extracting reviews for requested book
     user_reviews=db.execute('SELECT * FROM reviews WHERE book_id=:book_id',{'book_id':book_id})
-    return render_template('bookpage.html',book_details=book_details,user_reviews=user_reviews,review_entered=review_entered,title='Book:'+book_id,rating=rating,review=review)
+    return render_template('bookpage.html',book_details=book_details,user_reviews=user_reviews,review_entered=review_entered,title='Book:'+book_id,goodreads_data=goodreads_data)
 
 
 @app.route('/signup')

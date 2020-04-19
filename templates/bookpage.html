@@ -18,9 +18,9 @@
                 <p class="card-text text-light centerjustify"><span style="font-weight: bolder; font-family: Georgia, 'Times New Roman', Times, serif;">ISBN: </span> {{book.isbn}}</p>
                 <p class="card-text text-light centerjustify"><span style="font-weight: bolder; font-family: Georgia, 'Times New Roman', Times, serif;">Published: </span> {{book.published}}</p>
                 <p class="btn btn-danger br centerjustify" style="font: 1em sans-serif; font-weight: bolder;">
-                    Goodreads- {{rating}}
+                    Goodreads- {{goodreads_data.average_rating}}
                     <img src="https://i.ibb.co/jWYstpZ/Stars-Transparent.png" width="17px" height="17px" style="margin-top: 1.5px;">
-                    ({{review}})
+                    ({{goodreads_data.number_ratings}})
                 </p>
             </div>
         </div>

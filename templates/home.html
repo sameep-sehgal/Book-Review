@@ -13,11 +13,11 @@
 {% set count = namespace(value=0) %}
 {%for book in books %} 
         <div class="card bg-dark br p-3 boxshadow growanimation m-4" style="width: 18rem; ">
-            <a href="{{url_for('bookpage',username=session['username_login'],book_id=book.id,rating=goodreads_data_list[count.value].average_rating,review=goodreads_data_list[count.value].average_rating)}}" style="text-decoration: none;">
-                <img src="https://i.ibb.co/0M6BpTY/janko-ferlic-sf-L-QOnmy00-unsplash.jpg" class="card-img-top centerjustify p-1 bg-light mt-3" alt="..." height="275px">
+            <a href="{{url_for('bookpage',username=session['username_login'],book_id=book.id)}}" style="text-decoration: none;">
+                <img src="" class="card-img-top centerjustify p-1 bg-light mt-3" alt="..." height="275px">
             </a>
             <div class="card-body">
-                <a href="{{url_for('bookpage',username=session['username_login'],book_id=book.id,rating=goodreads_data_list[count.value].average_rating,review=goodreads_data_list[count.value].average_rating)}}" style="text-decoration: none;">
+                <a href="{{url_for('bookpage',username=session['username_login'],book_id=book.id)}}" style="text-decoration: none;">
                     <h4 class="card-title text-warning text-center singlelinetext" style="height:40px; font: 1em sans-serif; font-weight: bolder;">{{book.name}}</h4>
                 </a>
                 <p class="card-text text-light centerjustify"><span style="font-weight: bolder; font-family: Georgia, 'Times New Roman', Times, serif;">Author: </span> {{book.author}}</p>
