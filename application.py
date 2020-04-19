@@ -80,7 +80,7 @@ def home(username):
 
 
 @app.route('/book/<username>/<book_id>/',methods=['GET','POST'])
-def bookpage(username,book_id):
+def bookpage(username,book_id,rating,review):
     #checking if user is already logged in
     if 'username_login' not in session:
         return redirect(url_for('index'))
@@ -102,7 +102,7 @@ def bookpage(username,book_id):
     
     #extracting reviews for requested book
     user_reviews=db.execute('SELECT * FROM reviews WHERE book_id=:book_id',{'book_id':book_id})
-    return render_template('bookpage.html',book_details=book_details,user_reviews=user_reviews,review_entered=review_entered,title='Book:'+book_id)
+    return render_template('bookpage.html',book_details=book_details,user_reviews=user_reviews,review_entered=review_entered,title='Book:'+book_id,rating=rating,review=review)
 
 
 @app.route('/signup')
@@ -189,3 +189,12 @@ def loggedout():
     #delete session for the user
     session.pop('username_login')
     return render_template('loggedout.html')
+
+
+@app.route('/accountdeleted',methods=['POST'])
+def accountdeleted():
+    #delete session for the user
+    db.execute("DELETE FROM reviews WHERE username=:username",{'username':session['username_login']})
+    db.execute("DELETE FROM users WHERE username=:username",{'username':session['username_login']})
+    session.pop('username_login')
+    return render_template('accountdeleted.html')
