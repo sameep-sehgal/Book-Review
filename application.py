@@ -1,5 +1,6 @@
 import os
 import csv
+import requests
 
 from flask import Flask, session,render_template,request,redirect,url_for
 from flask_session import Session
@@ -37,30 +38,43 @@ def home(username):
     #checking if user is already logged in
     if 'username_login' not in session:
         return redirect(url_for('index'))
+    #extracting search input
     search_input=request.args.get('search_input')
     if search_input is not None:
+        #when search input is not empty
         books=db.execute("SELECT * FROM books WHERE isbn LIKE '%"+search_input+"%' OR name LIKE '%"+search_input+"%' OR author LIKE '%"+search_input+"%' LIMIT 100")
-        books_count=books.rowcount    
+        books_count=books.rowcount  #keep the count of number of books after search 
     else:
+        #when search input is empty displaying all books
         books=db.execute("SELECT * FROM books WHERE isbn LIKE '%"+''+"%' OR name LIKE '%"+''+"%' OR author LIKE '%"+''+"%' LIMIT 100")
-        books_count=books.rowcount 
+        books_count=books.rowcount #keep the count of number of books after search
     return render_template('home.html',title='Home',books=books,books_count=books_count)
 
 
-@app.route('/book/<username>/<book_id>/')
+@app.route('/book/<username>/<book_id>/',methods=['GET','POST'])
 def bookpage(username,book_id):
+    #checking if user is already logged in
+    if 'username_login' not in session:
+        return redirect(url_for('index'))
     #extracting book data from database
     book_details=db.execute("SELECT * FROM books WHERE id=:book_id",{'book_id':book_id})
-    #extracting review and rating user entered
-    rating=request.args.get('rating')
-    review=request.args.get('review')
-    #saving the review in reviews table in database
-    if review is not None:
-        db.execute('INSERT INTO reviews (username,book_id,review,rating) VALUES (:username,:book_id,:review,:rating)',{'username':session['username_login'],'book_id':book_id,'review':review,'rating':int(rating)})
-        return redirect(url_for('bookpage',username=session['username_login'],book_id=book_id))
+    #checking if user has already reviewed the book
+    if db.execute("SELECT * FROM reviews WHERE username=:username AND book_id=:book_id",{'username':session['username_login'],'book_id':book_id}).rowcount==0:
+        review_entered = False
+        if request.method=='POST':
+            #extracting review and rating user entered
+            rating=request.form.get('rating')
+            review=request.form.get('review')
+            if review is not None:
+                #saving the review in reviews table in database
+                db.execute('INSERT INTO reviews (username,book_id,review,rating) VALUES (:username,:book_id,:review,:rating)',{'username':session['username_login'],'book_id':book_id,'review':review,'rating':int(rating)})
+                db.commit()
+    else:
+        review_entered = True
+    
     #extracting reviews for requested book
     user_reviews=db.execute('SELECT * FROM reviews WHERE book_id=:book_id',{'book_id':book_id})
-    return render_template('bookpage.html',book_details=book_details,user_reviews=user_reviews)
+    return render_template('bookpage.html',book_details=book_details,user_reviews=user_reviews,review_entered=review_entered)
 
 
 @app.route('/signup')
