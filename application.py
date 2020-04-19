@@ -61,18 +61,20 @@ def home(username):
         #when search input is not empty
         books=db.execute("SELECT * FROM books WHERE isbn LIKE '%"+search_input+"%' OR upper(name) LIKE '%"+search_input+"%' OR upper(author) LIKE '%"+search_input+"%' LIMIT 10")
         books_count=books.rowcount  #keep the count of number of books after search 
+        isbns=db.execute("SELECT isbn FROM books WHERE isbn LIKE '%"+search_input+"%' OR upper(name) LIKE '%"+search_input+"%' OR upper(author) LIKE '%"+search_input+"%' LIMIT 10")
         goodreads_data_list = []
-        for book in books:
-            goodreads_data=get_review_counts(book.isbn)
+        for isbn in isbns:
+            goodreads_data=get_review_counts(isbn)
             goodreads_data_list.append(goodreads_data)
 
     else:
         #when search input is empty displaying all books
         books=db.execute("SELECT * FROM books WHERE isbn LIKE '%"+''+"%' OR name LIKE '%"+''+"%' OR author LIKE '%"+''+"%' LIMIT 10")
         books_count=books.rowcount #keep the count of number of books after search
+        isbns=db.execute("SELECT isbn FROM books WHERE isbn LIKE '%"+''+"%' OR name LIKE '%"+''+"%' OR author LIKE '%"+''+"%' LIMIT 10")
         goodreads_data_list = []
-        for book in books:
-            goodreads_data=get_review_counts(book.isbn)
+        for isbn in isbns:
+            goodreads_data=get_review_counts(isbn)
             goodreads_data_list.append(goodreads_data)
     return render_template('home.html',title='Home',books=books,books_count=books_count,goodreads_data_list=goodreads_data_list)
 
@@ -84,8 +86,9 @@ def bookpage(username,book_id):
         return redirect(url_for('index'))
     #extracting book data from database
     book_details=db.execute("SELECT * FROM books WHERE id=:book_id",{'book_id':book_id})
-    for book_detail in book_details:
-        goodreads_data=get_review_counts(book_detail.isbn)
+    isbns=db.execute("SELECT isbn FROM books WHERE id=:book_id",{'book_id':book_id})
+    for isbn in isbns:
+        goodreads_data=get_review_counts(isbn)
     #checking if user has already reviewed the book
     if db.execute("SELECT * FROM reviews WHERE username=:username AND book_id=:book_id",{'username':session['username_login'],'book_id':book_id}).rowcount==0:
         review_entered = False

@@ -7,8 +7,8 @@
     <h5 class="text-dark font-weight-bold padd br py-1 centerjustify">{{username}}</h5><hr>
     <h3 class="text-warning font-weight-bold bg-dark padd br py-1 centerjustify">Email:</h3>
     <h5 class="text-dark font-weight-bold padd br py-1 centerjustify">{{email}}</h5><hr>
-    <form action="{{url_for('accountdeleted')}}" method="POST">
-        <button type="submit" class="btn btn-danger br centerjustify">Delete Account</button>
+    <form action="{{url_for('accountdeleted')}}" method="POST" class="centerjustify">
+        <button type="submit" class="btn btn-danger br ">Delete Account</button>
     </form>
 </div>
 {%endblock%}

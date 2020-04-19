@@ -9,13 +9,12 @@
 </form>
 <hr style="border-width: 5px; margin: 0px;" class="bg-dark">
 
-<div class="displaygrid" style="overflow:scroll; height:780px; border-left:10px dotted black; border-right: 10px dotted black; margin-bottom: 0px;">
+<div class="displaygrid" style="overflow:scroll; height:760px; border-left:10px dotted black; border-right: 10px dotted black; margin-bottom: 0px;">
 {% set count = namespace(value=0) %}
-{%for book in books %} 
-        <div class="card bg-dark br p-3 boxshadow growanimation m-4" style="width: 18rem; ">
+{%for book in books%} 
+        <div class="card bg-dark br p-3 boxshadow growanimation m-4" style="width: 18rem; height: 635px;">
             <a href="{{url_for('bookpage',username=session['username_login'],book_id=book.id)}}" style="text-decoration: none;">
-                <img src="" class="card-img-top centerjustify p-1 bg-light mt-3" alt="..." height="275px">
-            </a>
+                <img src="{{url_for('static',filename='janko-ferlic-sfL_QOnmy00-unsplash.jpg')}}" class="card-img-top centerjustify p-1 bg-light mt-3" alt="..." height="275px">
             <div class="card-body">
                 <a href="{{url_for('bookpage',username=session['username_login'],book_id=book.id)}}" style="text-decoration: none;">
                     <h4 class="card-title text-warning text-center singlelinetext" style="height:40px; font: 1em sans-serif; font-weight: bolder;">{{book.name}}</h4>
@@ -25,7 +24,7 @@
                 <p class="card-text text-light centerjustify"><span style="font-weight: bolder; font-family: Georgia, 'Times New Roman', Times, serif;">Published: </span> {{book.published}}</p>
                 <p class="btn btn-danger br centerjustify" style="font: 1em sans-serif; font-weight: bolder;">
                     Goodreads- {{goodreads_data_list[count.value].average_rating}}
-                     <img src="https://i.ibb.co/jWYstpZ/Stars-Transparent.png" width="17px" height="17px" style="margin-top: 1.5px;"> 
+                     <img src="{{url_for('static',filename='Stars-Transparent.png')}}" width="17px" height="17px" style="margin-top: 1.5px;"> 
                      ({{goodreads_data_list[count.value].number_ratings}})
                 </p>
             </div>
