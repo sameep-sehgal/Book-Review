@@ -49,7 +49,7 @@ def index():
         return redirect(url_for('home',username=session['username_login']))
     return render_template('index.html',title='Book Pile')
 
-@app.route('/home/<username>')
+@app.route('/home/<username>',methods=['GET','POST'])
 def home(username):
     #checking if user is already logged in
     if 'username_login' not in session:
@@ -72,9 +72,9 @@ def home(username):
 
     else:
         #when search input is empty displaying all books
-        books=db.execute("SELECT * FROM books WHERE isbn LIKE '%"+''+"%' OR name LIKE '%"+''+"%' OR author LIKE '%"+''+"%' LIMIT 10")
+        books=db.execute("SELECT * FROM books LIMIT 10")
         books_count=books.rowcount #keep the count of number of books after search
-        isbns=db.execute("SELECT isbn FROM books WHERE isbn LIKE '%"+''+"%' OR name LIKE '%"+''+"%' OR author LIKE '%"+''+"%' LIMIT 10")
+        isbns=db.execute("SELECT isbn FROM books LIMIT 10")
         goodreads_data_list = []
         for isbn in isbns:
             goodreads_data=get_review_counts(isbn)
