@@ -54,6 +54,9 @@ def home(username):
     #checking if user is already logged in
     if 'username_login' not in session:
         return redirect(url_for('index'))
+    #to avoid other users in url by get method
+    if username != session['username_login']:
+        return redirect(url_for('index'))
     #extracting search input
     search_input=request.args.get('search_input')
     if search_input is not None:
@@ -83,6 +86,9 @@ def home(username):
 def bookpage(username,book_id):
     #checking if user is already logged in
     if 'username_login' not in session:
+        return redirect(url_for('index'))
+    #to avoid other users in url by get method
+    if username != session['username_login']:
         return redirect(url_for('index'))
     #extracting book data from database
     book_details=db.execute("SELECT * FROM books WHERE id=:book_id",{'book_id':book_id})
@@ -177,6 +183,9 @@ def loginagain():
 def userprofile(username):
     #checking if user is already logged in
     if 'username_login' not in session:
+        return redirect(url_for('index'))
+    #to avoid other users in url by get method
+    if username != session['username_login']:
         return redirect(url_for('index'))
     #importing user data from database to show in profile.
     user_credentials_list=db.execute('SELECT * FROM users WHERE username=:username_login',{'username_login':session['username_login']})
